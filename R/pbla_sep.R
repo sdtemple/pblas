@@ -22,7 +22,7 @@ pbla_sep = function(r, beta, gamma, lag = 0){
     delta = gamma + B
     # calculate log likelihood (line 6)
     ia = rep(-log(n), n)
-    ip = - gamma * (r - r1)
+    ip = - delta * (r - r1)
     z = ia + ip
     XY = rep(0, n)
     for(j in (1:n)){

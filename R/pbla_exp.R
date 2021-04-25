@@ -22,7 +22,7 @@ pbla_exp = function(r, beta, gamma, lag = 0){
     delta = gamma + B
     # calculate expectations (line twelve)
     ia = rep(-log(n), n)
-    ip = - gamma * (r - r1) # check this
+    ip = - delta * (r - r1) # check this
     z = ia + ip
     chiphi = rep(0, n)
     for(j in (1:n)){

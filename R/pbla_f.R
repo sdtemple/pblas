@@ -21,7 +21,7 @@ pbla_f = function(r, beta, gamma, lag = 0){
     B = apply(beta[(n+1):N,1:n], 2, sum)
     # calculate log likelihood (line 6)
     ia = rep(-log(n), n)
-    ip = - gamma * (r - r1) # check this
+    ip = - (gamma + B) * (r - r1) # check this
     z = ia + ip
     WY = rep(0, n)
     for(j in (1:n)){

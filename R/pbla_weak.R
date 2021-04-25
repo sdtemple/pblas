@@ -23,7 +23,7 @@ pbla_weak = function(r, beta, gamma, N, lag = 0){
     delta = gamma + B
     # calculate log likelihood (line 8)
     ia = rep(-log(n), n)
-    ip = - gamma * (r - r1)
+    ip = - delta * (r - r1)
     # weak limit (lemma 3)
     wl = - beta / (N * delta) * choose(n, 2) +
       (beta ^ 2) / (12 * ((delta * N) ^ 2) * n * (n - 1) * (4 * n - 5))

@@ -23,7 +23,7 @@ pbla_prod = function(r, beta, gamma, N, lag = 0){
     delta = gamma + B
     # calculate
     ia = rep(-log(n), n)
-    ip = - gamma * (r - r1)
+    ip = - delta * (r - r1)
     # product expectation (lemma 2)
     pe = sum(log(delta) - log(beta * 1:(n-1) + delta))
     z = ia + ip + pe
