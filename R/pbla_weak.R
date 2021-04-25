@@ -1,0 +1,51 @@
+#' Weak limit PBLA
+#'
+#' Based on weak limit result, compute pair-based likelihood approximation. Assume exponential infectious periods.
+#'
+#' @param r numeric vector of increasing removal times
+#' @param beta numeric rate
+#' @param gamma numeric rate
+#' @param N integer population size
+#' @param lag numeric fixed lag
+#'
+#' @return negative log likelihood
+#'
+#' @export
+pbla_weak = function(r, beta, gamma, N, lag = 0){
+  if((beta <= 0) | (gamma <= 0)){
+    return(1e9)
+  } else{
+    # initialize
+    n = length(r)
+    r1 = r[1]
+    beta = beta / N
+    B = beta * (N - n)
+    delta = gamma + B
+    # calculate log likelihood (line 8)
+    ia = rep(-log(n), n)
+    ip = - gamma * (r - r1)
+    # weak limit (lemma 3)
+    wl = - beta / (N * delta) * choose(n, 2) +
+      (beta ^ 2) / (12 * ((delta * N) ^ 2) * n * (n - 1) * (4 * n - 5))
+    z = ia + ip + wl
+    for(j in (1:n)){
+      X = 0
+      rj = r[j]
+      for(k in (1:n)[-j]){
+        rk = r[k]
+        if(rj < rk){
+          x = exp(- delta * (rk - rj + lag))
+        } else{
+          x = exp(- delta * (rj - lag - rk))
+        }
+        X = X + x
+      }
+      z[-j] = z[-j] + log(X) + log(beta) - log(2)
+    }
+    # line 8
+    z = log(sum(exp(z)))
+    a = n * (log(gamma) - log(delta))
+    # negative log likelihood
+    return(-(a+z))
+  }
+}
