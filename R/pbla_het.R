@@ -5,19 +5,19 @@
 #' @param rates numeric vector of rates
 #' @param R integer index to split rates on
 #' @param pbla function
-#' @param imap matrix of assignments
-#' @param rmap vector of assignments
+#' @param betamap matrix of assignments
+#' @param gammamap vector of assignments
 #' @param r numeric vector of increasing removal times
 #' @param etc other parameters to pass (e.g. lag)
 #'
 #' @return negative log likelihood
 #'
 #' @export
-pbla_het = function(rates, R, pbla, imap, rmap, r, etc){
+pbla_het = function(rates, R, pbla, betamap, gammamap, r, etc){
   br = rates[1:R]
   gr = rates[(R+1):length(rates)]
-  beta = map_beta(br, imap)
+  beta = map_beta(br, betamap)
   beta = beta / ncol(beta)
-  gamma = gr[rmap]
+  gamma = gr[gammamap]
   return(do.call(pbla, c(list(r=r,beta=beta,gamma=gamma), etc)))
 }

@@ -1,0 +1,152 @@
+#' Standard PBLA
+#'
+#' Compute pair-based likelihood approximation. Supports Erlang infectious periods.
+#'
+#' @param r numeric vector of increasing removal times
+#' @param beta matrix of rates
+#' @param gamma numeric vector of rates
+#' @param m positive integer shape
+#' @param lag numeric fixed lag
+#'
+#' @return negative log likelihood
+#'
+#' @export
+pbla_std = function(r, beta, gamma, m = 1, lag = 0){
+  is.wholenumber = function(x, tol = .Machine$double.eps^0.5){
+    abs(x - round(x)) < tol
+  }
+  if((any(beta <= 0)) | (any(gamma <= 0)) | (!is.wholenumber(m)) | (m <= 0)){
+    return(1e9) # positive rates, positive integer shape
+  } else{
+    if(m == 1){ # exponential case
+      # initialize
+      n = length(r)
+      N = ncol(beta)
+      r1 = r[1]
+      # change of variable to delta
+      if(n < (N - 1)){
+        B = apply(beta[(n+1):N,1:n], 2, sum)
+        delta = gamma + B
+      } else{ # handles entire population infected
+        if(n == N){delta = gamma}
+        if(n == (N - 1)){delta = gamma + beta[N,1:n]}
+      }
+      # calculate expectations (line twelve)
+      ia = rep(-log(n), n)
+      ip = - delta * (r - r1)
+      z = ia + ip
+      chiphi = rep(0, n)
+      for(j in (1:n)){
+        X = 0
+        Y = 0
+        rj= r[j]
+        deltaj = delta[j]
+        for(k in (1:n)[-j]){
+          b = beta[k,j]
+          rk = r[k]
+          deltak = delta[k]
+          denom = (deltaj + deltak) * (b + deltak)
+          # lemma 1
+          if(rj < rk){
+            w = deltaj / denom  * exp(- deltak * (rk - (rj - lag)))
+            x = deltak * w
+            y = 1 - b * w
+          } else{
+            w = deltak / denom * exp(- deltaj * ((rj - lag) - rk))
+            x = deltaj * w
+            y = deltak / (b + deltak) + b * w
+          }
+          # line twelve
+          X = X + b * x / y
+          Y = Y + log(y)
+        }
+        chiphi[j] = Y + log(X)
+      }
+      # line eight
+      for(alpha in 1:n){z[alpha] = z[alpha] + sum(chiphi[-alpha])}
+      z = log(sum(exp(z)))
+      a = sum(log(gamma / delta))
+      # negative log likelihoods
+      return(-(a+z))
+    } else{ # erlang case
+      # initialize
+      n = length(r)
+      N = ncol(beta)
+      r1 = r[1]
+      # change of variable to delta
+      if(n < (N - 1)){
+        B = apply(beta[(n+1):N,1:n], 2, sum)
+        delta = gamma + B
+      } else{ # handles entire population infected
+        if(n == N){delta = gamma}
+        if(n == (N - 1)){delta = gamma + beta[N,1:n]}
+      }
+      # calculate expectations (line twelve)
+      ia = rep(-log(n), n)
+      ip = log(1 - pgamma(r - r1, m, delta))
+      z = ia + ip
+      chiphi = rep(0, n)
+      for(j in (1:n)){
+        X = 0
+        Y = 0
+        rj= r[j]
+        deltaj = delta[j]
+        for(k in (1:n)[-j]){
+          b = beta[k,j]
+          rk = r[k]
+          deltak = delta[k]
+          # lemma 4
+          if(rj < rk){
+            U = 0
+            V = 0
+            for(l in 0:(m-1)){
+              v = 0
+              for(p in 0:l){
+                v = v + choose(m + p - 1, p) / 
+                  factorial(l - p) *
+                  ((rk - rj + lag) ^ (l - p)) /
+                  ((deltaj + deltak) ^ (m + p))
+              }
+              U = U + v / ((deltak + b) ^ (m - l))
+              V = V + v * (deltak ^ l) * 
+                (((deltak / (deltak + b)) ^ (m - l)) - 1) 
+            }
+            w = exp(- deltak * (rk - rj + lag)) * (deltaj ^ m)
+            x = (deltak ^ m) * w * U
+            y = 1 + w * V
+          } else{
+            U = 0
+            V = 0
+            for(l in 0:(m-1)){
+              v = 0
+              for(p in 0:(m-1)){
+                v = v + choose(l + p, p) / 
+                  factorial(m - p - 1) *
+                  ((rj - lag - rk) ^ (m - p - 1)) /
+                  ((deltaj + deltak) ^ (l + p + 1))
+              }
+              U = U + v / ((deltak + b) ^ (m - l))
+              V = V + v * (deltak ^ l) * 
+                (((deltak / (deltak + b)) ^ (m - l)) - 1) 
+            }
+            w = exp(- deltak * (rj - lag - rk)) * (deltaj ^ m)
+            x = (deltak ^ m) * w * U
+            y = 1 + (w * V) - 
+              pgamma(rj - lag - rk, m, deltaj) *
+              (1 - ((deltak / (deltak + b)) ^ m))
+          }
+          # line twelve
+          X = X + b * x / y
+          Y = Y + log(y)
+        }
+        chiphi[j] = Y + log(X)
+      }
+      # line eight
+      for(alpha in 1:n){z[alpha] = z[alpha] + sum(chiphi[-alpha])}
+      z = log(sum(exp(z)))
+      a = sum(m * log(gamma / delta))
+      # negative log likelihoods
+      return(-(a+z))
+    }
+  }
+}

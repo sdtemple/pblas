@@ -2,9 +2,9 @@
 % Please edit documentation in R/pbla_ed.R
 \name{pbla_ed}
 \alias{pbla_ed}
-\title{Eichner-Dietz PBLA (Exponential)}
+\title{Eichner-Dietz PBLA}
 \usage{
-pbla_ed(r, beta, gamma, nt, mint)
+pbla_ed(r, beta, gamma, m, nt, mint)
 }
 \arguments{
 \item{r}{numeric vector of increasing removal times}
@@ -12,6 +12,8 @@ pbla_ed(r, beta, gamma, nt, mint)
 \item{beta}{matrix of rates}
 
 \item{gamma}{numeric vector of rates}
+
+\item{m}{positive integer shape}
 
 \item{nt}{integer points for trapezoidal integration}
 
@@ -21,5 +23,5 @@ pbla_ed(r, beta, gamma, nt, mint)
 negative log likelihood
 }
 \description{
-Compute the Eichner-Dietz likelihood approximation. Assume exponential infectious periods.
+Compute the Eichner-Dietz likelihood approximation. Supports Erlang infectious periods.
 }

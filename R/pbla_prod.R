@@ -1,6 +1,6 @@
 #' Product PBLA
 #'
-#' Based on product independence, compute pair-based likelihood approximation. Assume exponential infectious periods.
+#' Based on product independence, compute pair-based likelihood approximation. Assumes exponential infectious periods.
 #'
 #' @param r numeric vector of increasing removal times
 #' @param beta numeric rate
@@ -19,8 +19,14 @@ pbla_prod = function(r, beta, gamma, N, lag = 0){
     n = length(r)
     r1 = r[1]
     beta = beta / N
-    B = beta * (N - n)
-    delta = gamma + B
+    # change of variable to delta
+    if(n < (N - 1)){
+      B = apply(beta[(n+1):N,1:n], 2, sum)
+      delta = gamma + B
+    } else{ # handles entire population infected
+      if(n == N){delta = gamma}
+      if(n == (N - 1)){delta = gamma + beta[N,1:n]}
+    }
     # calculate
     ia = rep(-log(n), n)
     ip = - delta * (r - r1)

@@ -4,7 +4,7 @@
 \alias{pbla_het}
 \title{PBLAs for Stochastic Epidemic Model (Heterogeneous Mixing)}
 \usage{
-pbla_het(rates, R, pbla, imap, rmap, r, etc)
+pbla_het(rates, R, pbla, betamap, gammamap, r, etc)
 }
 \arguments{
 \item{rates}{numeric vector of rates}
@@ -13,9 +13,9 @@ pbla_het(rates, R, pbla, imap, rmap, r, etc)
 
 \item{pbla}{function}
 
-\item{imap}{matrix of assignments}
+\item{betamap}{matrix of assignments}
 
-\item{rmap}{vector of assignments}
+\item{gammamap}{vector of assignments}
 
 \item{r}{numeric vector of increasing removal times}
 

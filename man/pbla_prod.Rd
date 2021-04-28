@@ -21,5 +21,5 @@ pbla_prod(r, beta, gamma, N, lag = 0)
 negative log likelihood
 }
 \description{
-Based on product independence, compute pair-based likelihood approximation. Assume exponential infectious periods.
+Based on product independence, compute pair-based likelihood approximation. Assumes exponential infectious periods.
 }

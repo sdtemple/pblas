@@ -19,5 +19,5 @@ pbla_f(r, beta, gamma, lag = 0)
 negative log likelihood
 }
 \description{
-Via 3.3.1., compute pair-based likelihood approximation.
+Via 3.3.1., compute pair-based likelihood approximation. Supports exponential infectious periods.
 }

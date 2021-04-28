@@ -1,6 +1,6 @@
 #' f-based PBLA
 #'
-#' Via 3.3.1., compute pair-based likelihood approximation.
+#' Via 3.3.1., compute pair-based likelihood approximation. Supports exponential infectious periods.
 #'
 #' @param r numeric vector of removal times
 #' @param beta matrix of rates
@@ -18,7 +18,13 @@ pbla_f = function(r, beta, gamma, lag = 0){
     n = length(r)
     N = ncol(beta)
     r1 = r[1]
-    B = apply(beta[(n+1):N,1:n], 2, sum)
+    # compute B
+    if(n < (N - 1)){
+      B = apply(beta[(n+1):N,1:n], 2, sum)
+    } else{ # handles entire population infected
+      if(n == N){B = 0}
+      if(n == (N - 1)){B = beta[N,1:n]}
+    }
     # calculate log likelihood (line 6)
     ia = rep(-log(n), n)
     ip = - (gamma + B) * (r - r1) # check this
