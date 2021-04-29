@@ -12,11 +12,14 @@
 #' @export
 pbla_sep = function(r, beta, gamma, lag = 0){
   if((any(beta <= 0)) | (any(gamma <= 0))){
-    return(1e9) # positive rates
+    # invalid parameters
+    return(1e12)
   } else{
+
     # initialize
     n = length(r)
     N = ncol(beta)
+
     r1 = r[1]
     # change of variable to delta
     if(n < (N - 1)){
@@ -26,10 +29,13 @@ pbla_sep = function(r, beta, gamma, lag = 0){
       if(n == N){delta = gamma}
       if(n == (N - 1)){delta = gamma + beta[N,1:n]}
     }
+
     # calculate log likelihood (line 6)
     ia = rep(-log(n), n)
     ip = - delta * (r - r1)
     z = ia + ip
+
+    # evaluate psi and chi terms
     XY = rep(0, n)
     for(j in (1:n)){
       X = 0
@@ -58,10 +64,12 @@ pbla_sep = function(r, beta, gamma, lag = 0){
       }
       XY[j] = log(X * exp(Y))
     }
+
     # line eight
     for(alpha in 1:n){z[alpha] = z[alpha] + sum(XY[-alpha])}
     z = log(sum(exp(z)))
     a = sum(log(gamma / delta))
+
     # negative log likelihood
     return(-(a+z))
   }

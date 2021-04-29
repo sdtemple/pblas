@@ -1,6 +1,6 @@
 #' PBLAs for Stochastic Epidemic Model (Heterogeneous Mixing)
 #'
-#' Run a pair-based likelihood approximation for a stochastic epidemic model. Heterogeneous mixing available via mapping assignments.
+#' Run a pair-based likelihood approximation for a stochastic epidemic model. Heterogeneous mixing available via mapping assignments. Compatible with `pbla_std`, `pbla_ed`, `pbla_sep`, and `pbla_f`.
 #'
 #' @param rates numeric vector of rates
 #' @param R integer index to split rates on

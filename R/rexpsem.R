@@ -1,6 +1,6 @@
 #' Simulate Exponential Infectious Periods
 #'
-#' Draw exponential infectious periods assuming SEM model.
+#' Draw exponential infectious periods assuming SEM model. Based on Gillespie algorithm.
 #'
 #' @param beta numeric rate
 #' @param gamma numeric rate
@@ -10,6 +10,7 @@
 #'
 #' @export
 rexpsem = function(beta, gamma, N){
+
   # initialize vectors
   t = 0
   betaN = beta / N
@@ -17,6 +18,7 @@ rexpsem = function(beta, gamma, N){
   r = rep(Inf, N)
   alpha = sample(N, 1)
   i[alpha] = t
+
   # simulate epidemic
   St = sum(is.infinite(i))
   It = sum(is.finite(i)) - sum(is.finite(r))
@@ -58,14 +60,18 @@ rexpsem = function(beta, gamma, N){
       t = t + miny
       r[argy] = t
     }
+
     # update (S,I) counts
     St = sum(is.infinite(i))
     It = sum(is.finite(i)) - sum(is.finite(r))
   }
+
+  # formatting
   output = matrix(c(i,r),
                   nrow = N,
                   ncol = 2,
                   byrow = F)
   colnames(output) = c('i','r')
+
   return(output)
 }

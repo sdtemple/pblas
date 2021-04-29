@@ -12,17 +12,24 @@
 #'
 #' @export
 pbla_std = function(r, beta, gamma, m = 1, lag = 0){
+
+  # copy and paste from is.integer documentation
   is.wholenumber = function(x, tol = .Machine$double.eps^0.5){
     abs(x - round(x)) < tol
   }
+
   if((any(beta <= 0)) | (any(gamma <= 0)) | (!is.wholenumber(m)) | (m <= 0)){
-    return(1e9) # positive rates, positive integer shape
+    # invalid parameters
+    return(1e12)
   } else{
-    if(m == 1){ # exponential case
+    if(m == 1){
+      # exponential infectious periods
+
       # initialize
       n = length(r)
       N = ncol(beta)
       r1 = r[1]
+
       # change of variable to delta
       if(n < (N - 1)){
         B = apply(beta[(n+1):N,1:n], 2, sum)
@@ -31,10 +38,13 @@ pbla_std = function(r, beta, gamma, m = 1, lag = 0){
         if(n == N){delta = gamma}
         if(n == (N - 1)){delta = gamma + beta[N,1:n]}
       }
-      # calculate expectations (line twelve)
+
+      # calculate log likelihood (line six)
       ia = rep(-log(n), n)
       ip = - delta * (r - r1)
       z = ia + ip
+
+      # evaluate psi and chi terms
       chiphi = rep(0, n)
       for(j in (1:n)){
         X = 0
@@ -62,17 +72,22 @@ pbla_std = function(r, beta, gamma, m = 1, lag = 0){
         }
         chiphi[j] = Y + log(X)
       }
+
       # line eight
       for(alpha in 1:n){z[alpha] = z[alpha] + sum(chiphi[-alpha])}
       z = log(sum(exp(z)))
       a = sum(log(gamma / delta))
+
       # negative log likelihoods
       return(-(a+z))
-    } else{ # erlang case
+    } else{
+      # erlang case
+
       # initialize
       n = length(r)
       N = ncol(beta)
       r1 = r[1]
+
       # change of variable to delta
       if(n < (N - 1)){
         B = apply(beta[(n+1):N,1:n], 2, sum)
@@ -81,10 +96,13 @@ pbla_std = function(r, beta, gamma, m = 1, lag = 0){
         if(n == N){delta = gamma}
         if(n == (N - 1)){delta = gamma + beta[N,1:n]}
       }
-      # calculate expectations (line twelve)
+
+      # calculate log likelihood (line six)
       ia = rep(-log(n), n)
       ip = log(1 - pgamma(r - r1, m, delta))
       z = ia + ip
+
+      # evaluate psi and chi terms
       chiphi = rep(0, n)
       for(j in (1:n)){
         X = 0
@@ -102,14 +120,14 @@ pbla_std = function(r, beta, gamma, m = 1, lag = 0){
             for(l in 0:(m-1)){
               v = 0
               for(p in 0:l){
-                v = v + choose(m + p - 1, p) / 
+                v = v + choose(m + p - 1, p) /
                   factorial(l - p) *
                   ((rk - rj + lag) ^ (l - p)) /
                   ((deltaj + deltak) ^ (m + p))
               }
               U = U + v / ((deltak + b) ^ (m - l))
-              V = V + v * (deltak ^ l) * 
-                (((deltak / (deltak + b)) ^ (m - l)) - 1) 
+              V = V + v * (deltak ^ l) *
+                (((deltak / (deltak + b)) ^ (m - l)) - 1)
             }
             w = exp(- deltak * (rk - rj + lag)) * (deltaj ^ m)
             x = (deltak ^ m) * w * U
@@ -120,18 +138,18 @@ pbla_std = function(r, beta, gamma, m = 1, lag = 0){
             for(l in 0:(m-1)){
               v = 0
               for(p in 0:(m-1)){
-                v = v + choose(l + p, p) / 
+                v = v + choose(l + p, p) /
                   factorial(m - p - 1) *
                   ((rj - lag - rk) ^ (m - p - 1)) /
                   ((deltaj + deltak) ^ (l + p + 1))
               }
               U = U + v / ((deltak + b) ^ (m - l))
-              V = V + v * (deltak ^ l) * 
-                (((deltak / (deltak + b)) ^ (m - l)) - 1) 
+              V = V + v * (deltak ^ l) *
+                (((deltak / (deltak + b)) ^ (m - l)) - 1)
             }
             w = exp(- deltak * (rj - lag - rk)) * (deltaj ^ m)
             x = (deltak ^ m) * w * U
-            y = 1 + (w * V) - 
+            y = 1 + (w * V) -
               pgamma(rj - lag - rk, m, deltaj) *
               (1 - ((deltak / (deltak + b)) ^ m))
           }
@@ -141,10 +159,12 @@ pbla_std = function(r, beta, gamma, m = 1, lag = 0){
         }
         chiphi[j] = Y + log(X)
       }
+
       # line eight
       for(alpha in 1:n){z[alpha] = z[alpha] + sum(chiphi[-alpha])}
       z = log(sum(exp(z)))
       a = sum(m * log(gamma / delta))
+
       # negative log likelihoods
       return(-(a+z))
     }

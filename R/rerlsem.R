@@ -1,6 +1,6 @@
 #' Simulate Erlang Infectious Periods
 #'
-#' Draw Erlang infectious periods assuming SEM model.
+#' Draw Erlang infectious periods assuming SEM model. Based on Gillespie algorithm.
 #'
 #' @param beta numeric rate
 #' @param gamma numeric rate
@@ -11,6 +11,7 @@
 #'
 #' @export
 rerlsem = function(beta, gamma, m, N){
+
   # initialize vectors
   t = 0
   betaN = beta / N
@@ -19,6 +20,7 @@ rerlsem = function(beta, gamma, m, N){
   M = rep(0, N)
   alpha = sample(N, 1)
   i[alpha] = t
+
   # simulate epidemic
   St = sum(is.infinite(i))
   It = sum(is.finite(i)) - sum(is.finite(r))
@@ -66,14 +68,18 @@ rerlsem = function(beta, gamma, m, N){
         r[argy] = t
       }
     }
+
     # update (S,I) counts
     St = sum(is.infinite(i))
     It = sum(is.finite(i)) - sum(is.finite(r))
   }
+
+  # formatting
   output = matrix(c(i,r),
                   nrow = N,
                   ncol = 2,
                   byrow = F)
   colnames(output) = c('i','r')
+
   return(output)
 }

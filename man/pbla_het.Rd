@@ -25,5 +25,5 @@ pbla_het(rates, R, pbla, betamap, gammamap, r, etc)
 negative log likelihood
 }
 \description{
-Run a pair-based likelihood approximation for a stochastic epidemic model. Heterogeneous mixing available via mapping assignments.
+Run a pair-based likelihood approximation for a stochastic epidemic model. Heterogeneous mixing available via mapping assignments. Compatible with \code{pbla_std}, \code{pbla_ed}, \code{pbla_sep}, and \code{pbla_f}.
 }

@@ -21,5 +21,5 @@ pbla_homo(rates, pbla, r, N, etc)
 negative log likelihood
 }
 \description{
-Run a pair-based likelihood approximation for a stochastic epidemic model. Heterogeneous mixing available via mapping assignments.
+Run a pair-based likelihood approximation for a stochastic epidemic model. Assumes homogeneous mixing. Compatible with \code{pbla_weak} and \code{pbla_prod}.
 }

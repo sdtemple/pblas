@@ -17,5 +17,5 @@ rexpsem(beta, gamma, N)
 infection and removal times
 }
 \description{
-Draw exponential infectious periods assuming SEM model.
+Draw exponential infectious periods assuming SEM model. Based on Gillespie algorithm.
 }

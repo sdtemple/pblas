@@ -19,5 +19,5 @@ rerlsem(beta, gamma, m, N)
 infection and removal times
 }
 \description{
-Draw Erlang infectious periods assuming SEM model.
+Draw Erlang infectious periods assuming SEM model. Based on Gillespie algorithm.
 }

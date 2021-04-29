@@ -13,49 +13,64 @@
 #'
 #' @export
 pbla_ed = function(r, beta, gamma, m, nt, mint){
+
   # copy and paste from caTools
   trapz = function (x, y){
     idx = 2:length(x)
     return(as.double((x[idx] - x[idx - 1]) %*% (y[idx] + y[idx - 1]))/2)
   }
+
+  # copy and paste from is.integer documentation
   is.wholenumber = function(x, tol = .Machine$double.eps^0.5){
     abs(x - round(x)) < tol
   }
+
   if((any(beta <= 0)) | (any(gamma <= 0)) | (!is.wholenumber(m)) | (m <= 0)){
-    return(1e9) # positive rates, positive integer shape
+    # invalid parameters
+    return(1e12)
   } else{
+
     if(m == 1){
+      # exponential infectious periods
+
       # initialize
       n = length(gamma)
       t = seq(mint, max(r), length.out = nt)
       A = rep(0, nt)
       Y = 0
+
       # evaluate integrals
       for(j in 1:n){
         gammaj = gamma[j]
         rj = r[j]
+        # calculate A
         for(k in 1:nt){
           A[k] = sum((beta[1:n,j] / gamma * exp(- gamma * (r - pmin(t[k], r))))[-j])
         }
+        # calculate values for trapezium rule
         y = rep(0, nt)
         for(k in (1:n)[-j]){
           rk = r[k]
           indices = which(t < min(rj, rk))
-          y[indices] = y[indices] + 
-            beta[k,j] * exp(- gamma[k] * (rk - t[indices]) - gammaj * (rj - t[indices]) - A[indices])  
+          y[indices] = y[indices] +
+            beta[k,j] * exp(- gamma[k] * (rk - t[indices]) - gammaj * (rj - t[indices]) - A[indices])
         }
-        Y = Y + log(gammaj) + log(trapz(t, y)) 
+        Y = Y + log(gammaj) + log(trapz(t, y))
       }
-      
+
       # failure to infect non-infectives
       Z = 0
       for(j in (n+1):N){Z = Z + sum(beta[1:n,j] / gamma)}
+
       # negative log likelihood
-      return(Z - Y) 
+      return(Z - Y)
     } else{
+      # Erlang case
+
       # initialize
       n = length(gamma)
       t = seq(mint, max(r), length.out = nt)
+
       #store some sum values
       U = matrix(0, nrow = n, ncol = nt)
       V = matrix(0, nrow = n, ncol = nt)
@@ -74,30 +89,35 @@ pbla_ed = function(r, beta, gamma, m, nt, mint){
           V[j,k] = v
         }
       }
+
       # evaluate integrals
       C = rep(0, nt)
       Y = 0
       for(j in 1:n){
         gammaj = gamma[j]
         rj = r[j]
+        # calculate C
         for(k in 1:nt){
           C[k] = sum((beta[1:n,j] / gamma * exp(- gamma * (r - pmin(t[k], r))) * U[1:n,k])[-j])
         }
+        # calculate values for trapezium rule
         y = rep(0, nt)
         for(k in (1:n)[-j]){
           rk = r[k]
           indices = which(t < min(rj, rk))
-          y[indices] = y[indices] + 
+          y[indices] = y[indices] +
             beta[k,j] * exp(- gamma[k] * (rk - t[indices]) - C[indices]) * V[k,indices]
         }
         y = y * dgamma(rj - t, m, gammaj)
         Y = Y + log(trapz(t, y))
       }
+
       # failure to infect non-infectives
       Z = 0
       for(j in (n+1):N){Z = Z + sum(beta[1:n,j] * m / gamma)}
+
       # negative log likelihood
-      return(Z - Y) 
+      return(Z - Y)
     }
   }
 }

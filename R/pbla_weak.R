@@ -12,13 +12,17 @@
 #'
 #' @export
 pbla_weak = function(r, beta, gamma, N, lag = 0){
+
   if((beta <= 0) | (gamma <= 0)){
+    # invalid parameters
     return(1e9)
   } else{
+
     # initialize
     n = length(r)
     r1 = r[1]
     beta = beta / N
+
     # change of variable to delta
     if(n < (N - 1)){
       B = apply(beta[(n+1):N,1:n], 2, sum)
@@ -27,6 +31,7 @@ pbla_weak = function(r, beta, gamma, N, lag = 0){
       if(n == N){delta = gamma}
       if(n == (N - 1)){delta = gamma + beta[N,1:n]}
     }
+
     # calculate log likelihood (line 8)
     ia = rep(-log(n), n)
     ip = - delta * (r - r1)
@@ -34,6 +39,8 @@ pbla_weak = function(r, beta, gamma, N, lag = 0){
     wl = - beta / (N * delta) * choose(n, 2) +
       (beta ^ 2) / (12 * ((delta * N) ^ 2) * n * (n - 1) * (4 * n - 5))
     z = ia + ip + wl
+
+    # evaluate chi terms
     for(j in (1:n)){
       X = 0
       rj = r[j]
@@ -48,9 +55,11 @@ pbla_weak = function(r, beta, gamma, N, lag = 0){
       }
       z[-j] = z[-j] + log(X) + log(beta) - log(2)
     }
+
     # line 8
     z = log(sum(exp(z)))
     a = n * (log(gamma) - log(delta))
+
     # negative log likelihood
     return(-(a+z))
   }

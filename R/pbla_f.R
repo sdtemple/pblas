@@ -11,13 +11,17 @@
 #'
 #' @export
 pbla_f = function(r, beta, gamma, lag = 0){
+
   if((any(beta <= 0)) | (any(gamma <= 0))){
-    return(1e9) # positive rates
+    # invalid parameters
+    return(1e12)
   } else{
+
     # initialize
     n = length(r)
     N = ncol(beta)
     r1 = r[1]
+
     # compute B
     if(n < (N - 1)){
       B = apply(beta[(n+1):N,1:n], 2, sum)
@@ -25,10 +29,13 @@ pbla_f = function(r, beta, gamma, lag = 0){
       if(n == N){B = 0}
       if(n == (N - 1)){B = beta[N,1:n]}
     }
+
     # calculate log likelihood (line 6)
-    ia = rep(-log(n), n)
-    ip = - (gamma + B) * (r - r1) # check this
+    ia = rep(-log(n), n) # discrete uniform patient zero
+    ip = - (gamma + B) * (r - r1)
     z = ia + ip
+
+    # evaluate psi, chi, and phi terms
     WY = rep(0, n)
     for(j in (1:n)){
       W = 0
@@ -57,8 +64,10 @@ pbla_f = function(r, beta, gamma, lag = 0){
       }
       WY[j] = log(W) + Y
     }
+
     for(alpha in 1:n){z[alpha] = z[alpha] + sum(WY[-alpha])}
     z = log(sum(exp(z)))
+
     # negative log likelihood
     return(-z)
   }

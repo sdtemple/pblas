@@ -12,13 +12,17 @@
 #'
 #' @export
 pbla_prod = function(r, beta, gamma, N, lag = 0){
+
   if((beta <= 0) | (gamma <= 0)){
-    return(1e9)
+    # invalid parameters
+    return(1e12)
   } else{
+
     # initialize
     n = length(r)
     r1 = r[1]
     beta = beta / N
+
     # change of variable to delta
     if(n < (N - 1)){
       B = apply(beta[(n+1):N,1:n], 2, sum)
@@ -27,12 +31,14 @@ pbla_prod = function(r, beta, gamma, N, lag = 0){
       if(n == N){delta = gamma}
       if(n == (N - 1)){delta = gamma + beta[N,1:n]}
     }
-    # calculate
+
+    # calculate log likelihood (line 6)
     ia = rep(-log(n), n)
     ip = - delta * (r - r1)
-    # product expectation (lemma 2)
-    pe = sum(log(delta) - log(beta * 1:(n-1) + delta))
+    pe = sum(log(delta) - log(beta * 1:(n-1) + delta)) # product expectation (lemma 2)
     z = ia + ip + pe
+
+    # evaluate chi terms
     for(j in (1:n)){
       X = 0
       rj = r[j]
@@ -47,9 +53,11 @@ pbla_prod = function(r, beta, gamma, N, lag = 0){
       }
       z[-j] = z[-j] + log(X) + log(beta) - log(2)
     }
+
     # line 8
     z = log(sum(exp(z)))
     a = n * (log(gamma) - log(delta))
+
     # negative log likelihood
     return(-(a+z))
   }
