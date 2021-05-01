@@ -1,6 +1,6 @@
 Package: pblas
 Title: Pair-based Likelihood Approximations
-Depends: R (>= 4.0.3)
+Depends: R (>= 3.6.2)
 Version: 0.0.1
 Authors@R: 
     person(given = "Seth D",
