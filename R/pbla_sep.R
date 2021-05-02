@@ -67,7 +67,7 @@ pbla_sep = function(r, beta, gamma, lag = 0){
 
     # line eight
     for(alpha in 1:n){z[alpha] = z[alpha] + sum(XY[-alpha])}
-    z = log(sum(exp(z)))
+    z = matrixStats::logSumExp(z)
     a = sum(log(gamma / delta))
 
     # negative log likelihood

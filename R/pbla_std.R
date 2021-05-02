@@ -75,7 +75,7 @@ pbla_std = function(r, beta, gamma, m = 1, lag = 0){
 
       # line eight
       for(alpha in 1:n){z[alpha] = z[alpha] + sum(chiphi[-alpha])}
-      z = log(sum(exp(z)))
+      z = matrixStats::logSumExp(z)
       a = sum(log(gamma / delta))
 
       # negative log likelihoods
@@ -162,9 +162,8 @@ pbla_std = function(r, beta, gamma, m = 1, lag = 0){
 
       # line eight
       for(alpha in 1:n){z[alpha] = z[alpha] + sum(chiphi[-alpha])}
-      z = log(sum(exp(z)))
+      z = matrixStats::logSumExp(z)
       a = sum(m * log(gamma / delta))
-
       # negative log likelihoods
       return(-(a+z))
     }

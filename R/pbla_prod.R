@@ -24,12 +24,11 @@ pbla_prod = function(r, beta, gamma, N, lag = 0){
     beta = beta / N
 
     # change of variable to delta
-    if(n < (N - 1)){
-      B = apply(beta[(n+1):N,1:n], 2, sum)
+    if(n < N){
+      B = beta * (N - n)
       delta = gamma + B
     } else{ # handles entire population infected
       if(n == N){delta = gamma}
-      if(n == (N - 1)){delta = gamma + beta[N,1:n]}
     }
 
     # calculate log likelihood (line 6)
@@ -55,7 +54,7 @@ pbla_prod = function(r, beta, gamma, N, lag = 0){
     }
 
     # line 8
-    z = log(sum(exp(z)))
+    z = matrixStats::logSumExp(z)
     a = n * (log(gamma) - log(delta))
 
     # negative log likelihood
