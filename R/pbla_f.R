@@ -23,11 +23,12 @@ pbla_f = function(r, beta, gamma, lag = 0){
     r1 = r[1]
 
     # compute B
-    if(n < (N - 1)){
+    if((n < (N - 1)) & (n > 1)){
       B = apply(beta[(n+1):N,1:n], 2, sum)
     } else{ # handles entire population infected
       if(n == N){B = 0}
       if(n == (N - 1)){B = beta[N,1:n]}
+      if(n == 1){B = beta[(n+1):N,1]}
     }
 
     # calculate log likelihood (line 6)

@@ -19,15 +19,16 @@ pbla_sep = function(r, beta, gamma, lag = 0){
     # initialize
     n = length(r)
     N = ncol(beta)
-
     r1 = r[1]
+
     # change of variable to delta
-    if(n < (N - 1)){
+    if((n < (N - 1)) & (n > 1)){
       B = apply(beta[(n+1):N,1:n], 2, sum)
       delta = gamma + B
-    } else{ # handles entire population infected
+    } else{ # handles special cases
       if(n == N){delta = gamma}
       if(n == (N - 1)){delta = gamma + beta[N,1:n]}
+      if(n == 1){delta = gamma + beta[(n+1):N,1]}
     }
 
     # calculate log likelihood (line 6)
