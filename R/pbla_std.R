@@ -147,7 +147,7 @@ pbla_std = function(r, beta, gamma, m = 1, lag = 0){
               V = V + v * (deltak ^ l) *
                 (((deltak / (deltak + b)) ^ (m - l)) - 1)
             }
-            w = exp(- deltak * (rj - lag - rk)) * (deltaj ^ m)
+            w = exp(- deltaj * (rj - lag - rk)) * (deltaj ^ m)
             x = (deltak ^ m) * w * U
             y = 1 + (w * V) -
               pgamma(rj - lag - rk, m, deltaj) *
