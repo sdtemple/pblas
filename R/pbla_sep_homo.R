@@ -1,6 +1,6 @@
-#' Weak limit PBLA
+#' Separated Product PBLA (Homogeneous Mixing)
 #'
-#' Based on weak limit result, compute pair-based likelihood approximation. Assumes exponential infectious periods.
+#' Based on product independence, compute pair-based likelihood approximation. Supports exponential infectious periods.
 #'
 #' @param r numeric vector of increasing removal times
 #' @param beta numeric rate
@@ -12,25 +12,25 @@
 #' @return negative log likelihood
 #'
 #' @export
-pbla_weak = function(r, beta, gamma, N, A = 1, lag = 0){
-
+pbla_sep_homo = function(r, beta, gamma, N, A = 1, lag = 0){
+  
   # copy and paste from is.integer documentation
   is.wholenumber = function(x, tol = .Machine$double.eps^0.5){
     abs(x - round(x)) < tol
   }
-
+  
   if((any(beta <= 0)) | (any(gamma <= 0)) |
      (!is.wholenumber(N)) | (N <= 0) |
      (!is.wholenumber(A)) | (A <= 0)){
     # invalid parameters
     return(1e15)
   } else{
-
+    
     # initialize
     n = length(r)
     r1 = r[1]
     beta = beta / N
-
+    
     # change of variable to delta
     if(n < N){
       B = beta * (N - n)
@@ -38,35 +38,45 @@ pbla_weak = function(r, beta, gamma, N, A = 1, lag = 0){
     } else{ # handles entire population infected
       if(n == N){delta = gamma}
     }
-
-    # calculate log likelihood (line 8)
+    
+    # calculate log likelihood (line 6)
     ia = rep(-log(A), A)
     ip = - delta * (r[1:A] - r1)
-    # weak limit (lemma 3)
-    wl = - beta / (N * delta) * choose(n, 2) +
-      (beta ^ 2) / (12 * ((delta * N) ^ 2) * n * (n - 1) * (4 * n - 5))
-    z = ia + ip + wl
-
-    # evaluate chi terms
+    z = ia + ip
+    
+    # evaluate psi and chi terms
+    XY = rep(0, n)
+    b = beta
+    denom1 = 2 * delta
+    denom2 = b + delta
     for(j in (1:n)){
       X = 0
-      rj = r[j]
+      Y = 0
+      rj= r[j]
       for(k in (1:n)[-j]){
+        # lemma 1
         rk = r[k]
         if(rj < rk){
-          x = exp(- delta * (rk - rj + lag))
+          w = exp(- delta * (rk - rj + lag))
+          x = b * delta / denom1 * w
+          y = 1 - b * delta / denom1 / denom2 * w
         } else{
-          x = exp(- delta * (rj - lag - rk))
+          w = exp(- delta * (rj - lag - rk))
+          x = b * delta / denom1 * w
+          y = delta * (1 + b / denom1 * w) / denom2
         }
+        # line twelve
         X = X + x
+        Y = Y + log(y)
       }
-      z[-j] = z[-j] + log(X) + log(beta) - log(2)
+      XY[j] = log(X * exp(Y))
     }
-
-    # line 8
+    
+    # line eight
+    for(alpha in 1:A){z[alpha] = z[alpha] + sum(XY[-alpha])}
     z = matrixStats::logSumExp(z)
-    a = n * (log(gamma) - log(delta))
-
+    a = n * log(gamma / delta)
+    
     # negative log likelihood
     return(-(a+z))
   }

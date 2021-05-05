@@ -6,16 +6,24 @@
 #' @param beta numeric rate
 #' @param gamma numeric rate
 #' @param N integer population size
+#' @param A integer patient zeros
 #' @param lag numeric fixed lag
 #'
 #' @return negative log likelihood
 #'
 #' @export
-pbla_prod = function(r, beta, gamma, N, lag = 0){
+pbla_prod = function(r, beta, gamma, N, A = 1, lag = 0){
 
-  if((beta <= 0) | (gamma <= 0)){
+  # copy and paste from is.integer documentation
+  is.wholenumber = function(x, tol = .Machine$double.eps^0.5){
+    abs(x - round(x)) < tol
+  }
+
+  if((any(beta <= 0)) | (any(gamma <= 0)) |
+     (!is.wholenumber(N)) | (N <= 0) |
+     (!is.wholenumber(A)) | (A <= 0)){
     # invalid parameters
-    return(1e12)
+    return(1e15)
   } else{
 
     # initialize
@@ -32,8 +40,8 @@ pbla_prod = function(r, beta, gamma, N, lag = 0){
     }
 
     # calculate log likelihood (line 6)
-    ia = rep(-log(n), n)
-    ip = - delta * (r - r1)
+    ia = rep(-log(A), A)
+    ip = - delta * (r[1:A] - r1)
     pe = sum(log(delta) - log(beta * 1:(n-1) + delta)) # product expectation (lemma 2)
     z = ia + ip + pe
 

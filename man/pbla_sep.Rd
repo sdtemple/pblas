@@ -4,7 +4,7 @@
 \alias{pbla_sep}
 \title{Separated Product PBLA}
 \usage{
-pbla_sep(r, beta, gamma, lag = 0)
+pbla_sep(r, beta, gamma, A = 1, lag = 0)
 }
 \arguments{
 \item{r}{numeric vector of increasing removal times}
@@ -12,6 +12,8 @@ pbla_sep(r, beta, gamma, lag = 0)
 \item{beta}{matrix of rates}
 
 \item{gamma}{numeric vector of rates}
+
+\item{A}{integer patient zeros}
 
 \item{lag}{numeric fixed lag}
 }

@@ -4,7 +4,7 @@
 \alias{pbla_weak}
 \title{Weak limit PBLA}
 \usage{
-pbla_weak(r, beta, gamma, N, lag = 0)
+pbla_weak(r, beta, gamma, N, A = 1, lag = 0)
 }
 \arguments{
 \item{r}{numeric vector of increasing removal times}
@@ -14,6 +14,8 @@ pbla_weak(r, beta, gamma, N, lag = 0)
 \item{gamma}{numeric rate}
 
 \item{N}{integer population size}
+
+\item{A}{integer patient zeros}
 
 \item{lag}{numeric fixed lag}
 }

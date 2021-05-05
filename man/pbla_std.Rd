@@ -4,7 +4,7 @@
 \alias{pbla_std}
 \title{Standard PBLA}
 \usage{
-pbla_std(r, beta, gamma, m = 1, lag = 0)
+pbla_std(r, beta, gamma, m = 1, A = 1, lag = 0)
 }
 \arguments{
 \item{r}{numeric vector of increasing removal times}
@@ -14,6 +14,8 @@ pbla_std(r, beta, gamma, m = 1, lag = 0)
 \item{gamma}{numeric vector of rates}
 
 \item{m}{positive integer shape}
+
+\item{A}{integer patient zeros}
 
 \item{lag}{numeric fixed lag}
 }

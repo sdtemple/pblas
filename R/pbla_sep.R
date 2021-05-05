@@ -5,15 +5,23 @@
 #' @param r numeric vector of increasing removal times
 #' @param beta matrix of rates
 #' @param gamma numeric vector of rates
+#' @param A integer patient zeros
 #' @param lag numeric fixed lag
 #'
 #' @return negative log likelihood
 #'
 #' @export
-pbla_sep = function(r, beta, gamma, lag = 0){
-  if((any(beta <= 0)) | (any(gamma <= 0))){
+pbla_sep = function(r, beta, gamma, A = 1, lag = 0){
+
+  # copy and paste from is.integer documentation
+  is.wholenumber = function(x, tol = .Machine$double.eps^0.5){
+    abs(x - round(x)) < tol
+  }
+
+  if((any(beta <= 0)) | (any(gamma <= 0)) |
+     (!is.wholenumber(A)) | (A <= 0)){
     # invalid parameters
-    return(1e12)
+    return(1e15)
   } else{
 
     # initialize
@@ -23,17 +31,17 @@ pbla_sep = function(r, beta, gamma, lag = 0){
 
     # change of variable to delta
     if((n < (N - 1)) & (n > 1)){
-      B = apply(beta[(n+1):N,1:n], 2, sum)
+      B = apply(beta[1:n,(n+1):N], 1, sum)
       delta = gamma + B
     } else{ # handles special cases
       if(n == N){delta = gamma}
-      if(n == (N - 1)){delta = gamma + beta[N,1:n]}
-      if(n == 1){delta = gamma + beta[(n+1):N,1]}
+      if(n == (N - 1)){delta = gamma + beta[1:(N-1),N]}
+      if(n == 1){delta = gamma + sum(beta[1,2:N])}
     }
 
     # calculate log likelihood (line 6)
-    ia = rep(-log(n), n)
-    ip = - delta * (r - r1)
+    ia = rep(-log(A), A)
+    ip = - delta[1:A] * (r[1:A] - r1)
     z = ia + ip
 
     # evaluate psi and chi terms
@@ -67,7 +75,7 @@ pbla_sep = function(r, beta, gamma, lag = 0){
     }
 
     # line eight
-    for(alpha in 1:n){z[alpha] = z[alpha] + sum(XY[-alpha])}
+    for(alpha in 1:A){z[alpha] = z[alpha] + sum(XY[-alpha])}
     z = matrixStats::logSumExp(z)
     a = sum(log(gamma / delta))
 
