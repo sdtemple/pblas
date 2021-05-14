@@ -1,10 +1,10 @@
-#' Eichner-Dietz PBLA
+#' Eichner-Dietz PBLA (Homogeneous Mixing)
 #'
 #' Compute the Eichner-Dietz likelihood approximation. Supports Erlang infectious periods.
 #'
 #' @param r numeric vector of increasing removal times
-#' @param beta matrix of rates
-#' @param gamma numeric vector of rates
+#' @param beta numeric rate
+#' @param gamma numeric rate
 #' @param m positive integer shape
 #' @param nt integer points for trapezoidal integration
 #' @param mint numeric lower bound for trapezoidal integration
@@ -12,7 +12,7 @@
 #' @return negative log likelihood
 #'
 #' @export
-pbla_ed = function(r, beta, gamma, m = 1, nt = 100, mint = -2){
+pbla_ed_homo = function(r, beta, gamma, N, m = 1, nt = 100, mint = -2){
 
   # copy and paste from caTools
   trapz = function (x, y){
@@ -25,7 +25,7 @@ pbla_ed = function(r, beta, gamma, m = 1, nt = 100, mint = -2){
     abs(x - round(x)) < tol
   }
 
-  if((any(beta <= 0)) | (any(gamma <= 0)) | (!is.wholenumber(m)) | (m <= 0)){
+  if((beta <= 0) | (gamma <= 0) | (!is.wholenumber(m)) | (m <= 0)){
     # invalid parameters
     return(1e15)
   } else{
@@ -34,19 +34,18 @@ pbla_ed = function(r, beta, gamma, m = 1, nt = 100, mint = -2){
       # exponential infectious periods
 
       # initialize
+      beta = beta / N
       n = length(r)
-      N = ncol(beta)
       t = seq(mint, max(r), length.out = nt)
       A = rep(0, nt)
       Y = 0
 
       # evaluate integrals
       for(j in 1:n){
-        gammaj = gamma[j]
         rj = r[j]
         # calculate A
         for(k in 1:nt){
-          A[k] = sum((beta[1:n,j] / gamma * exp(- gamma * (r - pmin(t[k], r))))[-j])
+          A[k] = sum((beta / gamma * exp(- gamma * (r - pmin(t[k], r))))[-j])
         }
         # calculate values for trapezium rule
         y = rep(0, nt)
@@ -54,14 +53,14 @@ pbla_ed = function(r, beta, gamma, m = 1, nt = 100, mint = -2){
           rk = r[k]
           indices = which(t < min(rj, rk))
           y[indices] = y[indices] +
-            beta[k,j] * exp(- gamma[k] * (rk - t[indices]) - gammaj * (rj - t[indices]) - A[indices])
+            beta * exp(- gamma * (rk - t[indices]) - gamma * (rj - t[indices]) - A[indices])
         }
-        Y = Y + log(gammaj) + log(trapz(t, y))
+        Y = Y + log(gamma) + log(trapz(t, y))
       }
 
       # failure to infect non-infectives
       Z = 0
-      for(j in (n+1):N){Z = Z + sum(beta[1:n,j] / gamma)}
+      for(j in (n+1):N){Z = Z + n * beta / gamma}
 
       # negative log likelihood
       return(Z - Y)
@@ -69,8 +68,8 @@ pbla_ed = function(r, beta, gamma, m = 1, nt = 100, mint = -2){
       # Erlang case
 
       # initialize
+      beta = beta / N
       n = length(r)
-      N = ncol(beta)
       t = seq(mint, max(r), length.out = nt)
 
       #store some sum values
@@ -78,14 +77,13 @@ pbla_ed = function(r, beta, gamma, m = 1, nt = 100, mint = -2){
       V = matrix(0, nrow = n, ncol = nt)
       for(j in 1:n){
         rj = r[j]
-        gammaj = gamma[j]
         for(k in 1:nt){
           u = 0
           v = 0
           tk = t[k]
           for(l in 0:(m-1)){
-            u = u + ((gammaj * (rj - min(tk, rj))) ^ l) / factorial(l) * (m - l)
-            v = v + ((gammaj * (rj - tk)) ^ l) / factorial(l)
+            u = u + ((gamma * (rj - min(tk, rj))) ^ l) / factorial(l) * (m - l)
+            v = v + ((gamma * (rj - tk)) ^ l) / factorial(l)
           }
           U[j,k] = u
           V[j,k] = v
@@ -96,11 +94,10 @@ pbla_ed = function(r, beta, gamma, m = 1, nt = 100, mint = -2){
       C = rep(0, nt)
       Y = 0
       for(j in 1:n){
-        gammaj = gamma[j]
         rj = r[j]
         # calculate C
         for(k in 1:nt){
-          C[k] = sum((beta[1:n,j] / gamma * exp(- gamma * (r - pmin(t[k], r))) * U[1:n,k])[-j])
+          C[k] = sum((beta / gamma * exp(- gamma * (r - pmin(t[k], r))) * U[1:n,k])[-j])
         }
         # calculate values for trapezium rule
         y = rep(0, nt)
@@ -108,15 +105,15 @@ pbla_ed = function(r, beta, gamma, m = 1, nt = 100, mint = -2){
           rk = r[k]
           indices = which(t < min(rj, rk))
           y[indices] = y[indices] +
-            beta[k,j] * exp(- gamma[k] * (rk - t[indices]) - C[indices]) * V[k,indices]
+            beta * exp(- gamma * (rk - t[indices]) - C[indices]) * V[k,indices]
         }
-        y = y * dgamma(rj - t, m, gammaj)
+        y = y * dgamma(rj - t, m, gamma)
         Y = Y + log(trapz(t, y))
       }
 
       # failure to infect non-infectives
       Z = 0
-      for(j in (n+1):N){Z = Z + sum(beta[1:n,j] * m / gamma)}
+      for(j in (n+1):N){Z = Z + n * beta * m / gamma}
 
       # negative log likelihood
       return(Z - Y)

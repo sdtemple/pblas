@@ -4,7 +4,7 @@
 \alias{pbla_homo}
 \title{PBLAs for Stochastic Epidemic Model (Homogeneous Mixing)}
 \usage{
-pbla_homo(rates, pbla, r, N, etc)
+pbla_homo(rates, pbla, r, N, etc = NULL)
 }
 \arguments{
 \item{rates}{numeric vector of rates}

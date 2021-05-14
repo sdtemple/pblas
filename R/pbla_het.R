@@ -13,11 +13,15 @@
 #' @return negative log likelihood
 #'
 #' @export
-pbla_het = function(rates, R, pbla, betamap, gammamap, r, etc){
+pbla_het = function(rates, R, pbla, betamap, gammamap, r, etc = NULL){
   br = rates[1:R]
   gr = rates[(R+1):length(rates)]
   beta = map_beta(br, betamap)
   beta = beta / ncol(beta)
   gamma = gr[gammamap]
-  return(do.call(pbla, c(list(r=r,beta=beta,gamma=gamma), etc)))
+  if(is.null(etc)){ # use defaults
+    return(do.call(pbla, list(r=r,beta=beta,gamma=gamma)))
+  } else{ # pass in all parameters
+    return(do.call(pbla, c(list(r=r,beta=beta,gamma=gamma), etc)))
+  }
 }

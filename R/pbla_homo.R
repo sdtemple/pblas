@@ -11,8 +11,12 @@
 #' @return negative log likelihood
 #'
 #' @export
-pbla_homo = function(rates, pbla, r, N, etc){
+pbla_homo = function(rates, pbla, r, N, etc = NULL){
   beta = rates[1]
   gamma = rates[2]
-  return(do.call(pbla, c(list(r=r,beta=beta,gamma=gamma,N=N), etc)))
+  if(is.null(etc)){ # use defaults
+    return(do.call(pbla, list(r=r,beta=beta,gamma=gamma,N=N)))
+  } else{ # pass in all parameters
+    return(do.call(pbla, c(list(r=r,beta=beta,gamma=gamma,N=N), etc)))
+  }
 }
