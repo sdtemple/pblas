@@ -1,5 +1,5 @@
 # pblas
-My implementations for pair-based likelihood approximations as seen in Stockdale, et al. (2019). This software adds to the original reference code at jessicastockdale/PBLA. Namely, I have:
+My implementations for pair-based likelihood approximations as seen in Stockdale, et al. (2019). This software adds to the original reference code at [jessicastockdale/PBLA](https://github.com/jessicastockdale/PBLA). Namely, I have:
 
 * implemented all PBLAs in the R scripting language;
 * optimized a O(m^2 n^2) task for computational efficiency
