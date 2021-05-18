@@ -22,4 +22,4 @@ Some key files in this repository are:
 * `pbla-erl.R` is the basis for simulation studies with Erlang infectious periods.
 * `pbla-mcmc-example.R` offers an example MCMC sampler with random walk proposals and Hastings ratios based on PBLAs.
 * `ncda-mcmc-example.R` offers and example MCMC sampler for non-centered data augmentation.
-* Various sample scripts for figures in my report are under `figures`. 
+* A sample script for simulation study figures is `pbla-figure.R`. I modify this script to generate various figures. 
