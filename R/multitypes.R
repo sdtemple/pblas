@@ -8,7 +8,7 @@
 #' @return matrix of infection rates
 #'
 #' @export
-map_beta = function(beta, map){
+multitypes = function(beta, map){
   n = nrow(map)
   N = ncol(map)
   betamap = matrix(beta[map], nrow = n, ncol = N)

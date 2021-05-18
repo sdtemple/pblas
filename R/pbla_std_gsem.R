@@ -1,4 +1,4 @@
-#' Standard PBLA (Homogeneous Mixing)
+#' Standard PBLA (General SEM)
 #'
 #' Compute pair-based likelihood approximation. Supports Erlang infectious periods.
 #'
@@ -13,13 +13,13 @@
 #' @return negative log likelihood
 #'
 #' @export
-pbla_std_homo = function(r, beta, gamma, N, m = 1, A = 1, lag = 0){
-  
+pbla_std_gsem = function(r, beta, gamma, N, m = 1, A = 1, lag = 0){
+
   # initialize
   n = length(r)
   r1 = r[1]
   beta = beta / N
-  
+
   # change of variable to delta
   if(n < N){
     B = beta * (N - n)
@@ -27,17 +27,17 @@ pbla_std_homo = function(r, beta, gamma, N, m = 1, A = 1, lag = 0){
   } else{ # handles entire population infected
     if(n == N){delta = gamma}
   }
-  
+
   # calculate log likelihood (line six)
   ia = rep(-log(A), A)
   ip = - delta * (r[1:A] - r1)
   z = ia + ip
-  
+
   # copy and paste from is.integer documentation
   is.wholenumber = function(x, tol = .Machine$double.eps^0.5){
     abs(x - round(x)) < tol
   }
-  
+
   if((any(beta <= 0)) | (any(gamma <= 0)) |
      (!is.wholenumber(N)) | (N <= 0) |
      (!is.wholenumber(m)) | (m <= 0) |
@@ -46,7 +46,7 @@ pbla_std_homo = function(r, beta, gamma, N, m = 1, A = 1, lag = 0){
     return(1e15)
   } else{
     if(m == 1){ # exponential infectious periods
-      
+
       # evaluate psi and chi terms
       chiphi = rep(0, n)
       b = beta
@@ -58,7 +58,7 @@ pbla_std_homo = function(r, beta, gamma, N, m = 1, A = 1, lag = 0){
         for(k in (1:n)[-j]){
           rk = r[k]
           # lemma 1
-          if(rj < rk){
+          if(rj - lag < rk){
             w = delta / denom  * exp(- delta * (rk - (rj - lag)))
             x = delta * w
             y = 1 - b * w
@@ -73,16 +73,16 @@ pbla_std_homo = function(r, beta, gamma, N, m = 1, A = 1, lag = 0){
         }
         chiphi[j] = Y + log(X)
       }
-      
+
       # line eight
       for(alpha in 1:A){z[alpha] = z[alpha] + sum(chiphi[-alpha])}
       z = matrixStats::logSumExp(z)
       a = n * log(gamma / delta)
-      
+
       # negative log likelihoods
       return(-(a+z))
     } else{ # erlang case
-      
+
       # evaluate psi and chi terms
       chiphi = rep(0, n)
       b = beta
@@ -93,7 +93,7 @@ pbla_std_homo = function(r, beta, gamma, N, m = 1, A = 1, lag = 0){
         for(k in (1:n)[-j]){
           rk = r[k]
           # lemma 4
-          if(rj < rk){
+          if(rj - lag < rk){
             U = 0
             V = 0
             for(l in 0:(m-1)){
@@ -138,7 +138,7 @@ pbla_std_homo = function(r, beta, gamma, N, m = 1, A = 1, lag = 0){
         }
         chiphi[j] = Y + log(X)
       }
-      
+
       # line eight
       for(alpha in 1:A){z[alpha] = z[alpha] + sum(chiphi[-alpha])}
       z = matrixStats::logSumExp(z)

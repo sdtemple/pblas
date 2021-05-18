@@ -4,7 +4,7 @@
 \alias{pbla_prod}
 \title{Product PBLA}
 \usage{
-pbla_prod(r, beta, gamma, N, A = 1, lag = 0)
+pbla_prod(r, beta, gamma, N, A = 1)
 }
 \arguments{
 \item{r}{numeric vector of increasing removal times}
@@ -16,8 +16,6 @@ pbla_prod(r, beta, gamma, N, A = 1, lag = 0)
 \item{N}{integer population size}
 
 \item{A}{integer patient zeros}
-
-\item{lag}{numeric fixed lag}
 }
 \value{
 negative log likelihood

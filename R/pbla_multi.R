@@ -1,6 +1,6 @@
-#' PBLAs for Stochastic Epidemic Model (Heterogeneous Mixing)
+#' PBLAs for Multitype Stochastic Epidemic Model
 #'
-#' Run a pair-based likelihood approximation for a stochastic epidemic model. Heterogeneous mixing available via mapping assignments. Compatible with `pbla_std`, `pbla_ed`, `pbla_sep`, and `pbla_f`.
+#' Run a pair-based likelihood approximation for a multitype stochastic epidemic model. Multitypes available via mapping assignments. Compatible with `pbla_std`, `pbla_ed`, `pbla_sep`, and `pbla_f`.
 #'
 #' @param rates numeric vector of rates
 #' @param R integer index to split rates on
@@ -13,10 +13,10 @@
 #' @return negative log likelihood
 #'
 #' @export
-pbla_het = function(rates, R, pbla, betamap, gammamap, r, etc = NULL){
+pbla_multi = function(rates, R, pbla, betamap, gammamap, r, etc = NULL){
   br = rates[1:R]
   gr = rates[(R+1):length(rates)]
-  beta = map_beta(br, betamap)
+  beta = multitypes(br, betamap)
   beta = beta / ncol(beta)
   gamma = gr[gammamap]
   if(is.null(etc)){ # use defaults

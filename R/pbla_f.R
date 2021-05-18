@@ -58,7 +58,7 @@ pbla_f = function(r, beta, gamma, A = 1, lag = 0){
         denom1 = gammaj + gammak
         denom2 = gammak + b
         # f lemmas
-        if(rj < rk){
+        if(rj - lag < rk){
           w = b * gammaj / (gammaj + gammak + Bj) * exp(- gammak * (rk - rj + lag))
           x = gammaj / denom1 / denom2  * exp(- gammak * (rk - rj + lag))
           y = 1 - b * x

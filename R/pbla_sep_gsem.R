@@ -1,4 +1,4 @@
-#' Separated Product PBLA (Homogeneous Mixing)
+#' Separated Product PBLA (General SEM)
 #'
 #' Based on product independence, compute pair-based likelihood approximation. Supports exponential infectious periods.
 #'
@@ -12,25 +12,25 @@
 #' @return negative log likelihood
 #'
 #' @export
-pbla_sep_homo = function(r, beta, gamma, N, A = 1, lag = 0){
-  
+pbla_sep_gsem = function(r, beta, gamma, N, A = 1, lag = 0){
+
   # copy and paste from is.integer documentation
   is.wholenumber = function(x, tol = .Machine$double.eps^0.5){
     abs(x - round(x)) < tol
   }
-  
+
   if((any(beta <= 0)) | (any(gamma <= 0)) |
      (!is.wholenumber(N)) | (N <= 0) |
      (!is.wholenumber(A)) | (A <= 0)){
     # invalid parameters
     return(1e15)
   } else{
-    
+
     # initialize
     n = length(r)
     r1 = r[1]
     beta = beta / N
-    
+
     # change of variable to delta
     if(n < N){
       B = beta * (N - n)
@@ -38,12 +38,12 @@ pbla_sep_homo = function(r, beta, gamma, N, A = 1, lag = 0){
     } else{ # handles entire population infected
       if(n == N){delta = gamma}
     }
-    
+
     # calculate log likelihood (line 6)
     ia = rep(-log(A), A)
     ip = - delta * (r[1:A] - r1)
     z = ia + ip
-    
+
     # evaluate psi and chi terms
     XY = rep(0, n)
     b = beta
@@ -56,7 +56,7 @@ pbla_sep_homo = function(r, beta, gamma, N, A = 1, lag = 0){
       for(k in (1:n)[-j]){
         # lemma 1
         rk = r[k]
-        if(rj < rk){
+        if(rj - lag < rk){
           w = exp(- delta * (rk - rj + lag))
           x = b * delta / denom1 * w
           y = 1 - b * delta / denom1 / denom2 * w
@@ -71,12 +71,12 @@ pbla_sep_homo = function(r, beta, gamma, N, A = 1, lag = 0){
       }
       XY[j] = log(X * exp(Y))
     }
-    
+
     # line eight
     for(alpha in 1:A){z[alpha] = z[alpha] + sum(XY[-alpha])}
     z = matrixStats::logSumExp(z)
     a = n * log(gamma / delta)
-    
+
     # negative log likelihood
     return(-(a+z))
   }

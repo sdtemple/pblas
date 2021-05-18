@@ -58,7 +58,7 @@ pbla_sep = function(r, beta, gamma, A = 1, lag = 0){
         deltak = delta[k]
         denom1 = (deltaj + deltak)
         denom2 = (b + deltak)
-        if(rj < rk){
+        if(rj - lag < rk){
           w = exp(- deltak * (rk - rj + lag))
           x = b * deltaj / denom1 * w
           y = 1 - b * deltaj / denom1 / denom2 * w

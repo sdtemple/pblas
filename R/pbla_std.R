@@ -60,7 +60,7 @@ pbla_std = function(r, beta, gamma, m = 1, A = 1, lag = 0){
           deltak = delta[k]
           denom = (deltaj + deltak) * (b + deltak)
           # lemma 1
-          if(rj < rk){
+          if(rj - lag < rk){
             w = deltaj / denom  * exp(- deltak * (rk - (rj - lag)))
             x = deltak * w
             y = 1 - b * w
@@ -97,7 +97,7 @@ pbla_std = function(r, beta, gamma, m = 1, A = 1, lag = 0){
           rk = r[k]
           deltak = delta[k]
           # lemma 4
-          if(rj < rk){
+          if(rj - lag < rk){
             U = 0
             V = 0
             for(l in 0:(m-1)){

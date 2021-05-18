@@ -7,12 +7,11 @@
 #' @param gamma numeric rate
 #' @param N integer population size
 #' @param A integer patient zeros
-#' @param lag numeric fixed lag
 #'
 #' @return negative log likelihood
 #'
 #' @export
-pbla_prod = function(r, beta, gamma, N, A = 1, lag = 0){
+pbla_prod = function(r, beta, gamma, N, A = 1){
 
   # copy and paste from is.integer documentation
   is.wholenumber = function(x, tol = .Machine$double.eps^0.5){
@@ -52,9 +51,9 @@ pbla_prod = function(r, beta, gamma, N, A = 1, lag = 0){
       for(k in (1:n)[-j]){
         rk = r[k]
         if(rj < rk){
-          x = exp(- delta * (rk - rj + lag))
+          x = exp(- delta * (rk - rj))
         } else{
-          x = exp(- delta * (rj - lag - rk))
+          x = exp(- delta * (rj - rk))
         }
         X = X + x
       }

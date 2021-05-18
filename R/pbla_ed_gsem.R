@@ -1,4 +1,4 @@
-#' Eichner-Dietz PBLA (Homogeneous Mixing)
+#' Eichner-Dietz PBLA (General SEM)
 #'
 #' Compute the Eichner-Dietz likelihood approximation. Supports Erlang infectious periods.
 #'
@@ -12,7 +12,7 @@
 #' @return negative log likelihood
 #'
 #' @export
-pbla_ed_homo = function(r, beta, gamma, N, m = 1, nt = 100, mint = -2){
+pbla_ed_gsem = function(r, beta, gamma, N, m = 1, nt = 100, mint = -2){
 
   # copy and paste from caTools
   trapz = function (x, y){
