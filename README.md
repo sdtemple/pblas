@@ -8,6 +8,8 @@ My implementations for pair-based likelihood approximations as seen in Stockdale
 * made the option of numerous patient zeros;
 * and supplemented code for simulation studies, MCMC samplers, and real data analyses.
 
+To use, I recommend using `pbla_std` for complex SEMs and `pbla_std_gsem` or `pbla_prod` for general SEMs. For large epidemics, some efficient memory use may be important; I demonstrate such with global variable assignments `<<-` in `pbla-ebola.R`. To simulate a general stochastic epidemic, use `rgsem`. 
+
 Some key files in this repository are:
 
 * `pbla-report-sdtemple.pdf` documents the model, theoretical developments, and experimental results.
