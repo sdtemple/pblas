@@ -24,4 +24,4 @@ Some key files in this repository are:
 * `ncda-mcmc-example.R` offers and example MCMC sampler for non-centered data augmentation.
 * A sample script for simulation study figures is `pbla-figure.R`. I modify this script to generate various figures. 
 
-This package has been tested on R 3.6.2 and R 4.0.5. Besides `pbla_std_parallel` and `pbla_prod_parallel`, source code is exclusively base R, so the package should operate for older versions of R. `pbla_std_parallel` and `pbla_prod_parallel` utilize `parallel`, `foreach`, and `doParallel` to offer parallel computing for the O(m^2 n^2) loop. Parallel computing will only speed up calculations for n > 10,000.  
+This package has been tested on R 3.6.2 and R 4.0.5. Besides `pbla_std_parallel` and `pbla_prod_parallel`, source code is exclusively base R, so the package should operate for older versions of R. `pbla_std_parallel` and `pbla_prod_parallel` utilize `parallel`, `foreach`, and `doParallel` to offer parallel computing for the O(m^2 n^2) loop. Parallel computing will only speed up calculations for n > 10,000. 
