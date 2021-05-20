@@ -48,7 +48,7 @@ pbla_std = function(r, beta, gamma, m = 1, A = 1, lag = 0){
     if(m == 1){ # exponential infectious periods
 
       # evaluate psi and chi terms
-      chiphi = rep(0, n)
+      psichi = rep(0, n)
       for(j in (1:n)){
         X = 0
         Y = 0
@@ -73,11 +73,11 @@ pbla_std = function(r, beta, gamma, m = 1, A = 1, lag = 0){
           X = X + b * x / y
           Y = Y + log(y)
         }
-        chiphi[j] = Y + log(X)
+        psichi[j] = Y + log(X)
       }
 
       # line eight
-      for(alpha in 1:A){z[alpha] = z[alpha] + sum(chiphi[-alpha])}
+      for(alpha in 1:A){z[alpha] = z[alpha] + sum(psichi[-alpha])}
       z = matrixStats::logSumExp(z)
       a = sum(log(gamma / delta))
 
@@ -86,7 +86,7 @@ pbla_std = function(r, beta, gamma, m = 1, A = 1, lag = 0){
     } else{ # erlang case
 
       # evaluate psi and chi terms
-      chiphi = rep(0, n)
+      psichi = rep(0, n)
       for(j in (1:n)){
         X = 0
         Y = 0
@@ -140,11 +140,11 @@ pbla_std = function(r, beta, gamma, m = 1, A = 1, lag = 0){
           X = X + b * x / y
           Y = Y + log(y)
         }
-        chiphi[j] = Y + log(X)
+        psichi[j] = Y + log(X)
       }
 
       # line eight
-      for(alpha in 1:A){z[alpha] = z[alpha] + sum(chiphi[-alpha])}
+      for(alpha in 1:A){z[alpha] = z[alpha] + sum(psichi[-alpha])}
       z = matrixStats::logSumExp(z)
       a = sum(m * log(gamma / delta))
       # negative log likelihoods

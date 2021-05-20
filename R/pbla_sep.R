@@ -45,7 +45,7 @@ pbla_sep = function(r, beta, gamma, A = 1, lag = 0){
     z = ia + ip
 
     # evaluate psi and chi terms
-    XY = rep(0, n)
+    psichi = rep(0, n)
     for(j in (1:n)){
       X = 0
       Y = 0
@@ -71,11 +71,11 @@ pbla_sep = function(r, beta, gamma, A = 1, lag = 0){
         X = X + x
         Y = Y + log(y)
       }
-      XY[j] = log(X * exp(Y))
+      psichi[j] = log(X * exp(Y))
     }
 
     # line eight
-    for(alpha in 1:A){z[alpha] = z[alpha] + sum(XY[-alpha])}
+    for(alpha in 1:A){z[alpha] = z[alpha] + sum(psichi[-alpha])}
     z = matrixStats::logSumExp(z)
     a = sum(log(gamma / delta))
 
