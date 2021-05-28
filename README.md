@@ -3,12 +3,18 @@ My implementations for pair-based likelihood approximations as seen in Stockdale
 
 * implemented all PBLAs in the R scripting language;
 * optimized an O(m^2 n^2) task for computational efficiency;
-* provided wrappers `pbla_gsem` and `pbla_multi` for optimizing general and multitype stochastic epidemic models;
+* provided wrappers `pbla_gsem` and `pbla_multi` for optimizing general and multitype stochastic epidemic models (SEMs);
 * made the option of a fixed exposed period for SEIR models;
 * made the option of numerous patient zeros;
 * and supplemented code for simulation studies, MCMC samplers, and real data analyses.
 
-To use, I recommend using `pbla_std` for complex SEMs and `pbla_prod` for general SEMs. For large epidemics, some efficient memory use may be important; I demonstrate such with global variable assignments `<<-` in `pbla-ebola.R`. To simulate a general stochastic epidemic, use `rgsem`. (See `multitypes.R` with `pbla_multi.R` for mulitype SEM. A case study is `pbla-mcmc-tristan.R`.)
+Some functions exist to reproduct the results of Stockdale, et al. (2019). Practitioners should use:
+
+* `pbla_std` for complex SEMs;
+* `pbla_prod` for general SEMs;
+* `rgsem` to simulate epidemics;
+
+For large epidemics, some efficient memory use may be important; I demonstrate such with global variable assignments `<<-` in `pbla-ebola.R`. To simulate a general stochastic epidemic, use `rgsem`. (See `multitypes.R` with `pbla_multi.R` for mulitype SEM. A case study is `pbla-mcmc-tristan.R`.)
 
 Some key files in this repository are:
 
