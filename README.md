@@ -12,7 +12,7 @@ Some functions exist to reproduct the results of Stockdale, et al. (2019). Pract
 
 * `pbla_std` for complex SEMs;
 * `pbla_prod` for general SEMs;
-* `rgsem` to simulate epidemics;\
+* `rgsem` to simulate epidemics;
 * `pbla_gsem`, `pbla_multi` as wrappers for MLE.
 
 For large epidemics, some efficient memory use may be important; I demonstrate such with global variable assignments `<<-` in `pbla-ebola.R`. To simulate a general stochastic epidemic, use `rgsem`. (See `multitypes.R` with `pbla_multi.R` for mulitype SEM. A case study is `pbla-mcmc-tristan.R`.)
