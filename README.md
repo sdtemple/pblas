@@ -19,16 +19,19 @@ For large epidemics, some efficient memory use may be important; I demonstrate s
 
 Some key files in this repository are:
 
-* `pbla-report-sdtemple.pdf` documents the model, theoretical developments, and experimental results.
-* `pbla-slides-sdtemple.pdf` summarizes the model, theoretical developments, and experimental results.
-* `pbla-bakeoff.R` compares 5 PBLAs in a simulation study.
-* `pbla-ebola.R`,`pbla-ebola-contours.R` examine the Ebola virus epidemic in West Africa. See `data/ebola/`.
-* `pbla-nN.R` studies PBLA independence assumptions under increasing n / N infected proportion. 
-* `pbla-mcmc-tristan.R` examines the common cold outbreak in Tristan da Cunha.
-* `pbla-exp.R` is the basis for simulation studies with exponential infectious periods.
-* `pbla-erl.R` is the basis for simulation studies with Erlang infectious periods.
-* `pbla-mcmc-example.R` offers a sampler with random walk proposals and Hastings ratios based on PBLAs.
-* `ncda-mcmc-example.R` offers a sampler for non-centered data augmentation.
-* A sample script for simulation study figures is `pbla-figure.R`. I modify this script to generate various figures. 
+* `pbla-report-sdtemple.pdf` documents the model, theoretical developments, and experimental results;
+* `pbla-slides-sdtemple.pdf` summarizes the model, theoretical developments, and experimental results;
+* `pbla-ebola.R`, `pbla-ebola-contours.R` examine the Ebola virus epidemic in West Africa (see `data/ebola/`);
+* `pbla-nN.R` studies PBLA independence assumptions under increasing n / N infected proportion;
+* `pbla-under.R` considers adjustments in the case of underreporting;
+* `pbla-time.R`, `pbla-parallel.R` benchmark computational performanc;
+* `pbla-rabies` investigates the dog rabies epidemic in Bangui, Central African Republic; 
+* `pbla-mcmc-tristan.R` examines the common cold outbreak in Tristan da Cunha;
+* `pbla-mcmc-example.R` offers a sampler with random walk proposals and Hastings ratios based on PBLAs;
+* `ncda-mcmc-example.R` offers a sampler for non-centered data augmentation;
+* `pbla-bakeoff.R` compares 5 PBLAs in a simulation study;
+* `pbla-exp.R` is the basis for simulation studies with exponential infectious periods;
+* `pbla-erl.R` is the basis for simulation studies with Erlang infectious periods;
+* `pbla-figure.R` is a sample script for figures in simulation studies. 
 
 This package has been tested on R 3.6.2 and R 4.0.5. Besides `pbla_prod_parallel`, source code is exclusively base R, so the package should operate for older versions of R. `pbla_prod_parallel` utilizes `parallel`, `foreach`, and `doParallel` to offer parallel computing for the O(n^2) loop. Parallel computing will only speed up calculations for n > 10,000. 
