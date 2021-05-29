@@ -3,7 +3,7 @@ My implementations for pair-based likelihood approximations as seen in Stockdale
 
 * implemented all PBLAs in the R scripting language;
 * optimized an O(m^2 n^2) task for computational efficiency;
-* provided wrappers `pbla_gsem` and `pbla_multi` for optimizing general and multitype stochastic epidemic models (SEMs);
+* provided wrappers `pbla_gsem` and `pbla_multi` for optimizing general and multitype stochastic epidemic models;
 * made the option of a fixed exposed period for SEIR models;
 * made the option of numerous patient zeros;
 * and supplemented code for simulation studies, MCMC samplers, and real data analyses.
