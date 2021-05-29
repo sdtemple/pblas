@@ -24,7 +24,7 @@ Some key files in this repository are:
 * `pbla-ebola.R`, `pbla-ebola-contours.R` examine the Ebola virus epidemic in West Africa (see `data/ebola/`);
 * `pbla-nN.R` studies PBLA independence assumptions under increasing n / N infected proportion;
 * `pbla-under.R` considers adjustments in the case of underreporting;
-* `pbla-time.R`, `pbla-parallel.R` benchmark computational performanc;
+* `pbla-time.R`, `pbla-parallel.R` benchmark computational performance;
 * `pbla-rabies` investigates the dog rabies epidemic in Bangui, Central African Republic; 
 * `pbla-mcmc-tristan.R` examines the common cold outbreak in Tristan da Cunha;
 * `pbla-mcmc-example.R` offers a sampler with random walk proposals and Hastings ratios based on PBLAs;
