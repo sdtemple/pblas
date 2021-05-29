@@ -22,7 +22,7 @@ Some key files in this repository are:
 * `pbla-report-sdtemple.pdf` documents the model, theoretical developments, and experimental results.
 * `pbla-slides-sdtemple.pdf` summarizes the model, theoretical developments, and experimental results.
 * `pbla-bakeoff.R` compares 5 PBLAs in a simulation study.
-* `pbla-ebola.R` examines the Ebola virus epidemic in West Africa.
+* `pbla-ebola.R`,`pbla-ebola-contours.R` examine the Ebola virus epidemic in West Africa. See `data/ebola/`.
 * `pbla-nN.R` studies PBLA independence assumptions under increasing n / N infected proportion. 
 * `pbla-mcmc-tristan.R` examines the common cold outbreak in Tristan da Cunha.
 * `pbla-exp.R` is the basis for simulation studies with exponential infectious periods.
