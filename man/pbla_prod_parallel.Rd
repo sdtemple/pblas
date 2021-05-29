@@ -4,7 +4,7 @@
 \alias{pbla_prod_parallel}
 \title{Product PBLA (Parallel)}
 \usage{
-pbla_prod_parallel(r, beta, gamma, N, nCores, A = 1)
+pbla_prod_parallel(r, beta, gamma, N, A = 1)
 }
 \arguments{
 \item{r}{numeric vector of increasing removal times}

@@ -25,7 +25,7 @@ pbla_ed_gsem = function(r, beta, gamma, N, m = 1, nt = 100, mint = -2){
     abs(x - round(x)) < tol
   }
 
-  if((beta <= 0) | (gamma <= 0) | (!is.wholenumber(m)) | (m <= 0)){
+  if((beta < 0) | (gamma < 0) | (!is.wholenumber(m)) | (m <= 0)){
     # invalid parameters
     return(1e15)
   } else{

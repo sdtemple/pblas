@@ -1,5 +1,6 @@
 # PBLA Figure
 # Seth Temple, sdtemple@uw.edu
+# May 2021
 
 # complementary to `pbla-exp.R`, `pbla-erl.R`, or `pbla-bakeoff.R`
 # check array sizes

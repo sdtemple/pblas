@@ -18,7 +18,7 @@ pbla_weak = function(r, beta, gamma, N, A = 1){
     abs(x - round(x)) < tol
   }
 
-  if((any(beta <= 0)) | (any(gamma <= 0)) |
+  if((any(beta < 0)) | (any(gamma < 0)) |
      (!is.wholenumber(N)) | (N <= 0) |
      (!is.wholenumber(A)) | (A <= 0)){
     # invalid parameters
@@ -29,6 +29,8 @@ pbla_weak = function(r, beta, gamma, N, A = 1){
     n = length(r)
     r1 = r[1]
     beta = beta / N
+    lb = log(beta)
+    l2 = log(2)
 
     # change of variable to delta
     if(n < N){
@@ -53,13 +55,12 @@ pbla_weak = function(r, beta, gamma, N, A = 1){
       for(k in (1:n)[-j]){
         rk = r[k]
         if(rj < rk){
-          x = exp(- delta * (rk - rj))
+          X = X + exp(- delta * (rk - rj))
         } else{
-          x = exp(- delta * (rj - rk))
+          X = X + exp(- delta * (rj - rk))
         }
-        X = X + x
       }
-      z[-j] = z[-j] + log(X) + log(beta) - log(2)
+      z[-j] = z[-j] + log(X) + lb - l2
     }
 
     # line 8

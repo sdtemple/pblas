@@ -25,7 +25,7 @@ pbla_ed = function(r, beta, gamma, m = 1, nt = 100, mint = -2){
     abs(x - round(x)) < tol
   }
 
-  if((any(beta <= 0)) | (any(gamma <= 0)) | (!is.wholenumber(m)) | (m <= 0)){
+  if((any(beta < 0)) | (any(gamma < 0)) | (!is.wholenumber(m)) | (m <= 0)){
     # invalid parameters
     return(1e15)
   } else{

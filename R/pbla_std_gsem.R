@@ -38,7 +38,7 @@ pbla_std_gsem = function(r, beta, gamma, N, m = 1, A = 1, lag = 0){
     abs(x - round(x)) < tol
   }
 
-  if((any(beta <= 0)) | (any(gamma <= 0)) |
+  if((any(beta < 0)) | (any(gamma < 0)) |
      (!is.wholenumber(N)) | (N <= 0) |
      (!is.wholenumber(m)) | (m <= 0) |
      (!is.wholenumber(A)) | (A <= 0)){
