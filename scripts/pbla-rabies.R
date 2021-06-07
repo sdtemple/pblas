@@ -22,7 +22,7 @@ rab$rt = rtimes
 
 scalar = 28 # four weeks
 r = rab$rt / scalar
-#plot(density(r), main = NA)
+plot(density(r), main = NA)
 
 # Analysis ----------------------------------------------------------------
 
@@ -48,9 +48,12 @@ table[1,4] = table[1,2] / table[1,3]
 x = seq(0.01, .5, length.out = 50)
 y = seq(0.01, .5, length.out = 50)
 z = matrix(0, 50, 50)
+ct = 1
 for(i in 1:50){
+    print(i)
     for(j in 1:50){
         z[i,j] = - pbla_prod(r, x[i], y[j], N[k])
+        ct = ct + 1
     }
 }
 filled.contour(x=x, y=y, z=z,
@@ -72,6 +75,7 @@ table[1,6] = max(ratio)
 rp = rpseudor(r, eta[1])
 rp = rp[rp >= min(r)]
 rp = rp[rp <= max(r)]
+#plot(density(rp), main = NA)
 out = nlm(pbla_gsem, 
           c(2,1), 
           pbla=pbla_prod, 
@@ -86,9 +90,12 @@ table[2,4] = table[2,2] / table[2,3]
 x = seq(.01, .5, length.out = 50)
 y = seq(.01, .5, length.out = 50)
 z = matrix(0, 50, 50)
+ct = 1
 for(i in 1:50){
+    print(i)
     for(j in 1:50){
         z[i,j] = - pbla_prod(rp, x[i], y[j], N[k])
+        ct = ct + 1
     }
 }
 filled.contour(x=x, y=y, z=z,
@@ -110,6 +117,7 @@ table[2,6] = max(ratio)
 rp = rpseudor(r, eta[2])
 rp = rp[rp >= min(r)]
 rp = rp[rp <= max(r)]
+#plot(density(rp), main = NA)
 out = nlm(pbla_gsem, 
           c(2,1), 
           pbla=pbla_prod, 
@@ -124,10 +132,12 @@ table[3,4] = table[3,2] / table[3,3]
 x = seq(.1, .6, length.out = 50)
 y = seq(.1, .6, length.out = 50)
 z = matrix(0, 50, 50)
+ct = 1
 for(i in 1:50){
     print(i)
     for(j in 1:50){
         z[i,j] = - pbla_prod(rp, x[i], y[j], N[k])
+        ct = ct + 1
     }
 }
 filled.contour(x=x, y=y, z=z,
@@ -149,6 +159,7 @@ table[3,6] = max(ratio)
 rp = rpseudor(r, eta[3])
 rp = rp[rp >= min(r)]
 rp = rp[rp <= max(r)]
+#plot(density(rp), main = NA)
 out = nlm(pbla_gsem, 
           c(2,1), 
           pbla=pbla_prod, 
@@ -163,10 +174,14 @@ table[4,4] = table[4,2] / table[4,3]
 x = seq(.1, .6, length.out = 50)
 y = seq(.1, .6, length.out = 50)
 z = matrix(0, 50, 50)
+#w = matrix(0, 30*30, 4)
+ct = 1
 for(i in 1:50){
     print(i)
     for(j in 1:50){
         z[i,j] = - pbla_prod(rp, x[i], y[j], N[k])
+        #w[ct,] = c(x[i], y[j], z[i,j], x[i] / y[j])
+        ct = ct + 1
     }
 }
 filled.contour(x=x, y=y, z=z,
