@@ -48,12 +48,10 @@ table[1,4] = table[1,2] / table[1,3]
 x = seq(0.01, .5, length.out = 50)
 y = seq(0.01, .5, length.out = 50)
 z = matrix(0, 50, 50)
-ct = 1
 for(i in 1:50){
     print(i)
     for(j in 1:50){
         z[i,j] = - pbla_prod(r, x[i], y[j], N[k])
-        ct = ct + 1
     }
 }
 filled.contour(x=x, y=y, z=z,
@@ -90,12 +88,10 @@ table[2,4] = table[2,2] / table[2,3]
 x = seq(.01, .5, length.out = 50)
 y = seq(.01, .5, length.out = 50)
 z = matrix(0, 50, 50)
-ct = 1
 for(i in 1:50){
     print(i)
     for(j in 1:50){
         z[i,j] = - pbla_prod(rp, x[i], y[j], N[k])
-        ct = ct + 1
     }
 }
 filled.contour(x=x, y=y, z=z,
@@ -132,12 +128,10 @@ table[3,4] = table[3,2] / table[3,3]
 x = seq(.1, .6, length.out = 50)
 y = seq(.1, .6, length.out = 50)
 z = matrix(0, 50, 50)
-ct = 1
 for(i in 1:50){
     print(i)
     for(j in 1:50){
         z[i,j] = - pbla_prod(rp, x[i], y[j], N[k])
-        ct = ct + 1
     }
 }
 filled.contour(x=x, y=y, z=z,
@@ -174,14 +168,10 @@ table[4,4] = table[4,2] / table[4,3]
 x = seq(.1, .6, length.out = 50)
 y = seq(.1, .6, length.out = 50)
 z = matrix(0, 50, 50)
-#w = matrix(0, 30*30, 4)
-ct = 1
 for(i in 1:50){
     print(i)
     for(j in 1:50){
         z[i,j] = - pbla_prod(rp, x[i], y[j], N[k])
-        #w[ct,] = c(x[i], y[j], z[i,j], x[i] / y[j])
-        ct = ct + 1
     }
 }
 filled.contour(x=x, y=y, z=z,
