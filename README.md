@@ -8,8 +8,7 @@ My implementations for pair-based likelihood approximations as seen in Stockdale
 * made the option of numerous patient zeros;
 * and supplemented code for simulation studies, MCMC samplers, and real data analyses.
 
-See [this video](https://youtu.be/jv1vYEU-VNA) for my oral exam on this research.
-Some functions exist to reproduct the results of Stockdale, et al. (2019). Practitioners should use:
+See [this video](https://youtu.be/jv1vYEU-VNA) for my oral exam. Some functions exist to reproduct the results of Stockdale, et al. (2019). Practitioners should use:
 
 * `pbla_std` for complex SEMs;
 * `pbla_prod` for general SEMs;
