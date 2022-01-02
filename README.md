@@ -34,4 +34,6 @@ Some key files in this repository are:
 * `pbla-erl.R` is the basis for simulation studies with Erlang infectious periods;
 * `pbla-figure.R` is a sample script for figures in simulation studies. 
 
-This package has been tested on R 3.6.2 and R 4.0.5. Besides `pbla_prod_parallel`, source code is exclusively base R, so the package should operate for older versions of R. `pbla_prod_parallel` utilizes `parallel`, `foreach`, and `doParallel` to offer parallel computing for the O(n^2) loop. Parallel computing will only speed up calculations for n > 10,000. 
+This package has been tested on R 3.6.2 and R 4.0.5. Besides `pbla_prod_parallel`, source code is exclusively base R, so the package should operate for older versions of R. `pbla_prod_parallel` utilizes `parallel`, `foreach`, and `doParallel` to offer parallel computing for the O(n^2) loop. Parallel computing will only speed up calculations for n > 10,000.
+
+Correction: please not that there is a mistake in the slides and report. On slide 8/31, the MLE for the removal rate gamma should be the MLE for an exponential rate. This impacts the figure on slide 22/31. R[0] estimates for the completely observed SEM do increase with increasing infected proportion. Thus, any commentary in the report and YouTube talk are invalid.
